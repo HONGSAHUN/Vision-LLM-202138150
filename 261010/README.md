@@ -1,9 +1,10 @@
 # 261010 - 1주차 과제: 기초 Linux CLI 및 Python 문법
 
 - 이름: 홍사훈
-- 제출 파일:
-`01_Linux-and-Python-tesk.py` : 01_Linux-and-Python.ipynb 파일의 TODO 및 section project 전체를 완료하여 그대로 .py로 변환한 파일
-`section_project.py` : 01_Linux-and-Python.inynb 파일의 section project 부분만 별도로 .py로 변환한 파일
+
+## 제출 파일
+- `01_Linux-and-Python-tesk.py` : 01_Linux-and-Python.ipynb 파일의 TODO 및 section project 전체를 완료하여 그대로 .py로 변환한 파일
+- `section_project.py` : 01_Linux-and-Python.inynb 파일의 1주차 과제로 부여 받은 section project 부분만 별도로 .py로 변환한 파일
 
 
 ## 주요 내용
