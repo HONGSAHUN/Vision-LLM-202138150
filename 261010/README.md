@@ -3,11 +3,13 @@
 - 이름: 홍사훈
 - 의존 패키지 : numpy
 
+## 실행 방법
+python 01_Linux-and-Python.py
+
 ## 제출 파일
 - `01_Linux-and-Python.py` : 01_Linux-and-Python.ipynb 파일의 TODO 및 section project 전체를 완료하여 필요한 부분만 .py로 변환한 파일
 
 ## 주요 내용
-- enumerate + zip을 활용한 85점 이상 학생 출력
 - NumPy 정규화 (합 기준) 및 min-max 0~1 float32 변환
 - Section Project: 학생 성적 분석 (1~6번)
 

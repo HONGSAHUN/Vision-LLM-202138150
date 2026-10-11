@@ -1,11 +1,6 @@
 import numpy as np
 
 np_arr = np.array([1, 2, 3, 4, 5])
-scores = np.array([
-    [83, 92, 100],  # 0번 학생
-    [76, 63, 58],   # 1번 학생
-    [91, 99, 84]    # 2번 학생
-])
 
 # TODO: NumPy 연산 함수를 사용하여 배열을 정규화
 
@@ -38,8 +33,8 @@ raw_scores = np.array([
 ])
 
 subjects = ["국어", "수학", "과학"]
-#%% md
-#%%
+
+
 # TODO: list comprehension을 활용해 raw_students 리스트에서 이름만 추출한 리스트 생성
 student_names = [kname.split("_")[1] for kname in raw_students]
 print("1. 학생 명단: ", end="")
@@ -56,7 +51,7 @@ for idx, score in enumerate(all_scores):
     print(f"{score}점", end=sep)
 
 
-# TODO: 전체 12개 성적 중 85점 이상 개수 (15개 아닌감)
+# TODO: 전체 12개 성적 중 85점 이상 개수; 15개로 수정
 over_85 = (raw_scores >= 85).sum()
 print(f"3. 전체 15개 성적 중 85점 이상 개수: {over_85}개", end="\n\n")
 
@@ -68,14 +63,13 @@ student_means_int = [int(score) for score in student_means]
 print("4. 학생별 평균 점수: ", end="")
 for idx, (name, score) in enumerate(zip(student_names, student_means_int)):
     sep = ", " if idx < len(student_names) - 1 else "\n\n"
-    print(f"{name} {score}점", end=sep)
-    # 예상 출력: "4. 학생별 평균 점수: 짱구 00점, 철수 00점, 맹구 00점, 유리 00점, 훈이 00점"
+    print(f"{name} {score}점", end=sep) # 예상 출력: "4. 학생별 평균 점수: 짱구 00점, 철수 00점, 맹구 00점, 유리 00점, 훈이 00점"
 
 
 # TODO: 평균 점수가 가장 높은 학생 선택
 top_student_idx = np.array(student_means).argmax()
 top_student_name = student_names[top_student_idx]
-print(f"5. 최고 평균 수석 학생: {top_student_name} ({student_means[top_student_idx]:.2f}점)\n")  # 예상 출력: "5. 최고 평균 수석 학생: XX (xx.xx점)"
+print(f"5. 최고 평균 수석 학생: {top_student_name} ({student_means[top_student_idx]:.2f}점)\n")  #예상 출력: "5. 최고 평균 수석 학생: XX (xx.xx점)"
 
 
 # TODO: 전체 점수 기준, 최고 점수와 과목 그리고 해당 학생 계산 (modulo % 사용 추천)
