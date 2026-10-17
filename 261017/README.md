@@ -55,11 +55,11 @@ python 261017_task.py
 
 **2. Opening 횟수 비교**
 
-![Opening 횟수 비교](opening_x.png)
+![Opening 횟수 비교](openingx.png)
 
 **3. Opening x2 + Closing 횟수 비교**
 
-![Closing 횟수 비교](opening_x2&closing.png)
+![Closing 횟수 비교](openingx2&closing.png)
 
 ### TODO: Binary mask로 외곽선 검출
 최종 마스크에서 외곽선 목록을 만들며, 농구공 1개와 작은 노이즈 덩어리 2개가 검출됩니다.
