@@ -15,8 +15,8 @@ Vision-LLM-202138150/
     ├── 261017_task.py               # 과제 코드
     ├── README.md                    # 이 문서
     ├── opening&closing.png          # Opening vs Closing 비교 결과
-    ├── opening_x.png                # Opening 횟수 비교 결과
-    ├── opening_x2&closing.png       # Closing 횟수 비교 결과
+    ├── openingx.png                # Opening 횟수 비교 결과
+    ├── openingx2&closing.png       # Closing 횟수 비교 결과
     └── final_img.png                # 최종 결과
 ```
 
@@ -82,7 +82,7 @@ python 261017_task.py
 
 ### 구현한 부분
 - LAB과 CLAHE 기반 binary mask를 생성하였다.
-- Opening/Closing 및 반복 횟수 비교 과정을 넣었고, 이의 결과를 이미지로 저장하였다.
+- Opening/Closing 및 반복 횟수 비교 과정을 넣었고, 이의 결과를 이미지로 캡처하여 README에 첨부하였다.
 - 외곽선 검출을 하고, 가장 큰 외곽선 선택까지 구현하였으며, 원본 이미지 위에 오버레이하였다.
 
 ### 구현하지 못한 부분
