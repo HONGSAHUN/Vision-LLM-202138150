@@ -49,6 +49,10 @@ python 261017_task.py
 
 ### TODO: Morphological operation을 적용하여 최종 binary mask 생성
 
+**0. Erosion vs Dilation vs Opening vs Closing**
+
+![Erosion vs Dilation vs Opening vs Closing](ed.png)
+
 **1. Opening vs Closing**
 
 ![Opening vs Closing](opening&closing.png)
@@ -83,6 +87,7 @@ python 261017_task.py
 ### 구현한 부분
 - LAB과 CLAHE 기반 binary mask를 생성하였다.
 - Opening/Closing 및 반복 횟수 비교 과정을 넣었고, 이의 결과를 이미지로 캡처하여 README에 첨부하였다.
+- Erosion vs Dilation vs Opening vs Closing 비교도 진행하여, 결과를 이미지로 캡쳐하여 README에 첨부하였다.
 - 외곽선 검출을 하고, 가장 큰 외곽선 선택까지 구현하였으며, 원본 이미지 위에 오버레이하였다.
 
 ### 구현하지 못한 부분
