@@ -22,13 +22,9 @@ mask_enhanced = cv2.inRange(basketball_enhanced_lab, lower_basketball_lab, upper
 # TODO: Morphological operation을 적용하여 최종 binary mask 생성
 kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
 
-basketball_mask_erode = cv2.erode(mask_enhanced, None, iterations=2)
-basketball_mask_dilate = cv2.dilate(mask_enhanced, None, iterations=2)
-
-
-# Erosion, Dilation, Opening, Closing 중 무엇이 더 나은지 비교 -> 노이즈가 가장 적어보이고, 농구공이 노이즈랑 구분된 Opening으로 결정
-basketball_mask_erode = cv2.erode(mask_enhanced, None, iterations=2)
-basketball_mask_dilate = cv2.dilate(mask_enhanced, None, iterations=2)
+# Erosion, Dilation, Opening, Closing 중 무엇이 더 나은지 비교 -> 노이즈가 더 적어서 Opening으로 결정
+basketball_mask_erode = cv2.erode(mask_enhanced, kernel)
+basketball_mask_dilate = cv2.dilate(mask_enhanced, kernel)
 basketball_mask_opened = cv2.morphologyEx(mask_enhanced, cv2.MORPH_OPEN, kernel)
 basketball_mask_closed = cv2.morphologyEx(mask_enhanced, cv2.MORPH_CLOSE, kernel)
 
