@@ -51,7 +51,7 @@ python 261017_task.py
 
 **0. Erosion vs Dilation vs Opening vs Closing**
 
-![Erosion vs Dilation vs Opening vs Closing](ed.png)
+![Erosion vs Dilation vs Opening vs Closing](ed1.png)
 
 **1. Opening vs Closing**
 
@@ -96,7 +96,9 @@ python 261017_task.py
 
 ## 6. 모폴로지 선택 근거
 
-### 1. Opening과 Closing 중 무엇이 더 나은지 비교 -> 노이즈가 더 적어서 Opening으로 결정
+### 1. Erosion, Dilation, Opening, Closing 중 무엇이 더 나은지 비교 -> 노이즈가 적고, 공의 형상이 잘 보이는 Opening으로 결정
+- **Erosion :** 노이즈는 많이 안 보이지만, 공의 형상이 잘 뚜렸하지 않다.
+- **Dilation :** 노이즈와 공이 붙어서 가장 참고하기 힘들어보인다.
 - **Opening :** 공 오른쪽 위의 가는 줄무늬 노이즈와 흩어진 작은 점들이 대부분 제거됐다.
 - **Closing :** 노이즈가 그대로 남거나 서로 붙어서, 공 오른쪽 테두리가 오히려 지저분해졌다.
 
