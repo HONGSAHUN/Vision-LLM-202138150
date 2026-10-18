@@ -14,6 +14,7 @@ Vision-LLM-202138150/
 └── 261017/
     ├── 261017_task.py               # 과제 코드
     ├── README.md                    # 이 문서
+    ├── ed1.png                      # Erosion, Dilation, Opening, Closing 비교 결과
     ├── opening&closing.png          # Opening vs Closing 비교 결과
     ├── openingx.png                 # Opening 횟수 비교 결과
     ├── openingx2&closing.png        # Closing 횟수 비교 결과
