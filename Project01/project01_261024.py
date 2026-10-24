@@ -111,12 +111,13 @@ kalman.processNoiseCov = np.array(
 kalman.measurementNoiseCov = np.eye(2, dtype=np.float32) * 1.0
 kalman.errorCovPost = np.eye(4, dtype=np.float32)
 
-# 실행 시 탄 속도와 탄약 수 입력 (엔터만 누르면 디폴트 30)
-bullet_speed = input("bullet speed(default = 30) : ")
+# 실행 시 탄 속도와 탄약 수 입력 (엔터만 누르면 디폴트 30, 탄속은 60 이하로 설정하도록 변경)
+bullet_speed = input("bullet speed(default = 30, maximum = 60) : ")
 ammo = input("ammo(default = 30) : ")
 
 # 요격 설정
 bullet_speed = int(bullet_speed) if bullet_speed else 30     # 탄 속도 (픽셀 / 프레임)
+if bullet_speed > 60: raise SystemExit("탄속이 너무 빠릅니다.")
 ammo = int(ammo) if ammo else 30
 max_lead = 30           # 최대 몇 프레임 앞까지 예측할지
 
