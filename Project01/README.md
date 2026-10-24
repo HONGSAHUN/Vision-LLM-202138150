@@ -19,7 +19,7 @@ Vision-LLM-202138150/
 ├── src/
 │   └── models/
 │       └── MediaPipe/
-│           └── hand_landmarker.task      # 손 인식 모델
+│           └── hand_landmarker.task      # 손 인식 모델 (여기서는 사용 안 함)
 └── Project01/
     ├── project01_261024.py       # 프로젝트 코드
     ├── hand_landmarker.task      # 손 인식 모델 (MediaPipe)
@@ -43,7 +43,7 @@ Vision-LLM-202138150/
 ### 필요한 라이브러리 및 모델
 수업에서 세팅한 Jetson 환경 그대로 사용
 - OpenCV, NumPy: JetPack 기본 포함 (`--system-site-packages` 가상환경)
-- MediaPipe와 `hand_landmarker.task` 모델: `02_Computer-Vision.ipynb` M 섹션에서 설치한 것을 그대로 사용
+- MediaPipe : `02_Computer-Vision.ipynb` M 섹션에서 설치한 것을 그대로 사용
 - 손 인식 모델(`hand_landmarker.task`) : Project01 폴더에 포함.
 
 ### 실행
@@ -51,7 +51,7 @@ Vision-LLM-202138150/
 ```bash
 cd Vision-LLM-202138150
 source .venv/bin/activate
-python project01_261024.py
+python Project01/project01_261024.py
 ```
 
 실행하면 터미널에서 두 값을 입력받습니다. 엔터만 누르면 기본값 30이 들어갑니다.
