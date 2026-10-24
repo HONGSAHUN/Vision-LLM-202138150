@@ -6,6 +6,10 @@
 
 ![테스트 사진](frame.jpg)
 
+### 실행 영상
+
+https://github.com/user-attachments/assets/a36a6fed-101d-42e1-a89c-613396afaa2b
+
 <br>
 
 ## 1. 파일 구조
