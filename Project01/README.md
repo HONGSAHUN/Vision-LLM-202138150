@@ -21,8 +21,13 @@ Vision-LLM-202138150/
 │       └── MediaPipe/
 │           └── hand_landmarker.task      # 손 인식 모델
 └── Project01/
-    ├── project01_261024.py               # 프로젝트 코드
-    └── README.md                         # 이 문서
+    ├── project01_261024.py       # 프로젝트 코드
+    ├── hand_landmarker.task      # 손 인식 모델 (MediaPipe)
+    ├── original.jpg              # 실행 화면 - 원본
+    ├── mask.jpg                  # 실행 화면 - 마스크
+    ├── frame.jpg                 # 실행 화면 - 결과
+    ├── testing.mov               # 테스트 영상
+    └── README.md                 # 이 문서
 ```
 
 - **project01_261024.py**: 공 검출 → 칼만 추적 → 손 인식 → 선행 조준 → 발사·명중 판정 → 화면 표시를 한 루프에서 처리하는 단일 실행 파일
@@ -39,13 +44,14 @@ Vision-LLM-202138150/
 수업에서 세팅한 Jetson 환경 그대로 사용
 - OpenCV, NumPy: JetPack 기본 포함 (`--system-site-packages` 가상환경)
 - MediaPipe와 `hand_landmarker.task` 모델: `02_Computer-Vision.ipynb` M 섹션에서 설치한 것을 그대로 사용
+- 손 인식 모델(`hand_landmarker.task`) : Project01 폴더에 포함.
 
 ### 실행
 레포 최상위 폴더에서 가상환경을 켜고 실행합니다.
 ```bash
 cd Vision-LLM-202138150
 source .venv/bin/activate
-python Project01/project01_261024.py
+python project01_261024.py
 ```
 
 실행하면 터미널에서 두 값을 입력받습니다. 엔터만 누르면 기본값 30이 들어갑니다.
