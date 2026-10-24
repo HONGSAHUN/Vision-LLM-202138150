@@ -1,4 +1,4 @@
-import time                 # FPS 계산용
+import os, time                 # FPS 계산용
 import cv2                  # 영상 처리용
 import numpy as np          # 벡터, 행렬 계산용
 import mediapipe as mp      # 손 인식용
@@ -54,7 +54,7 @@ kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
 clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
 
 ### 손 검출 설정 (기존 내용과 동일)
-base_option = python.BaseOptions(model_asset_path="src/models/MediaPipe/hand_landmarker.task")
+base_option = python.BaseOptions(model_asset_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), "hand_landmarker.task"))
 options = vision.HandLandmarkerOptions(base_options=base_option, num_hands=2)
 hand_detector = vision.HandLandmarker.create_from_options(options)
 connections = vision.HandLandmarksConnections.HAND_CONNECTIONS
