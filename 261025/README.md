@@ -2,7 +2,7 @@
 
 `03_DL-and-GPU.ipynb`의 모델 성능 확인부터 CuPy convolution 연산까지의 TODO를 구현한 과제입니다.
 
-앞에서 배운 CNN 학습 코드와 Feature Map 시각화 함수를 사용하고, NumPy와 CuPy로 이미지 잔상 효과와 convolution을 구현하여 CPU와 GPU의 결과 및 처리 시간을 비교합니다.
+앞에서 배운 CNN 학습 코드와 Feature Map 시각화 함수를 사용하고, NumPy와 CuPy로 이미지 잔상 효과와 convolution을 구현하여 CPU와 GPU의 결과 및 처리 시간을 비교하는 과제를 수행하였습니다.
 
 ## 1. 파일 구조와 역할
 
@@ -17,6 +17,7 @@
 
 - `261025_task.py`에는 필요한 import, 함수, 모델 정의, 데이터 로딩과 학습 코드가 들어 있습니다.
 - MNIST 데이터는 최초 실행 시 `src/datasets`에 다운로드됩니다.
+- `src/images/seagull.jpg` 이미지 파일도 폴더에 넣어서, 261025 폴더 만으로도 파일을 실행할 수 있도록 만들었습니다.
 
 ## 2. 동작 과정
 
@@ -69,12 +70,10 @@ python 261025_task.py
 - 입력 이미지 경로: `src/images/seagull.jpg`
 - 필요한 라이브러리: numpy, matplotlib, opencv-python, torch, torchvision, cupy
 - `time`, `random`은 Python 기본 라이브러리입니다.
-- MNIST는 최초 실행 시 다운로드하므로 인터넷 연결이 필요합니다.
+- MNIST는 최초 실행 시 다운로드하므로, 인터넷 연결이 요구됩니다.
 - CuPy와 CUDA를 사용할 수 있는 NVIDIA GPU 환경이 필요합니다.
 - 그래프 창이 표시되면 확인 후 닫아야 다음 코드가 실행됩니다.
-- 결과는 Matplotlib으로 출력하며 이미지 파일로 자동 저장하지는 않습니다.
-
-경로는 실행 폴더를 기준으로 합니다. 이미지를 찾을 수 없으면 `src/images/seagull.jpg`의 위치를 확인해야 합니다. CuPy는 파일 앞부분에서 import하므로, CuPy가 설치되지 않았다면 MNIST 학습 전부터 실행이 중단됩니다.
+- 결과는 Matplotlib으로 출력하며, 이미지 파일로 자동 저장하지는 않습니다.
 
 ## 4. 아이디어와 구현 내용
 
@@ -99,8 +98,8 @@ python 261025_task.py
 ## 5. 한계와 참고 사항
 
 - GPU convolution은 `stride=1`에서 사용해야 합니다. 다른 stride 값을 막는 조건은 없으며, 다른 값을 넣으면 잘못된 결과가 나올 수 있습니다.
-- 잔상은 CPU/GPU 이미지를 비교하며, 수치 오차를 따로 출력하지는 않습니다.
 - Convolution의 최대 절대 차이는 ReLU 적용 후 결과를 비교한 값입니다.
 - Convolution 시간에는 두 방향 필터 계산만 포함하고, ReLU, 결과 복사와 시각화는 제외합니다.
 - CPU는 픽셀별 반복문을 사용하고 GPU는 배열 전체를 계산하므로, 가속 배율에는 장치 성능뿐 아니라 계산 방식의 차이도 포함됩니다.
 - 실제 학습 결과와 GPU 처리 시간은 실행 환경에 따라 달라질 수 있습니다.
+- 과제 수행은 Google Colab에서 진행하였습니다. 런타임 유형을 T4 GPU로 변경하여 CUPY 같은 GPU 연산 기능들도 사용할 수 있도록 테스트해보았습니다.
