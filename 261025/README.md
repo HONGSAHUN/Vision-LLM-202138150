@@ -9,7 +9,7 @@
 ```text
 261025/
 ├── 261025_task.py       # 실습 준비 코드와 TODO 풀이
-├── README.md           # 이 문서
+├── README.md            # 이 문서
 └── src/
     └── images/
         └── seagull.jpg  # 입력 이미지
