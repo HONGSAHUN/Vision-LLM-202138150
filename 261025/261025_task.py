@@ -1,3 +1,5 @@
+### 261025_task.py 독립 실행을 위해, 실습 파일에서 필요한 내용을 가져왔습니다.
+
 import time
 import random
 
@@ -357,15 +359,27 @@ for epoch in range(epochs):
 total_training_time = time.perf_counter() - training_start_time
 print(f"Total CPU training time: {total_training_time:.2f}s")
 
+### 여기서부터 과제!!
+
 ### 모델 성능 확인
 
 # TODO: plt.plot(x축_데이터, y축_데이터, marker="o", label="데이터_이름")을 사용하여 그래프 생성
 plt.figure(figsize=(8,5))
 
 # TODO: train_loss_history 그래프 생성
-plt.plot(range(1, epochs + 1), train_loss_history, marker="o", label="Train Loss")
+plt.plot(
+    range(1, epochs + 1), 
+    train_loss_history, 
+    marker="o", 
+    label="Train Loss"
+)
 # TODO: test_loss_history 그래프 생성
-plt.plot(range(1, epochs + 1), test_loss_history, marker="o", label="Test Loss")
+plt.plot(
+    range(1, epochs + 1), 
+    test_loss_history, 
+    marker="o", 
+    label="Test Loss"
+)
 
 plt.xlabel("Epoch")
 plt.ylabel("Loss")
