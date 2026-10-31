@@ -162,3 +162,186 @@ python 261025_task.py
 - 실제 학습 결과와 GPU 처리 시간은 실행 환경에 따라 달라질 수 있습니다.
 - 과제 수행은 Google Colab에서 진행하였습니다. 런타임 유형을 T4 GPU로 변경하여 CUPY 같은 GPU 연산 기능들도 사용할 수 있도록 테스트해보았습니다.
 - 최종 테스트는 실습실의 엔비디아 젯슨 오린 나노에서 직접 진행해보았습니다. 진행한 결과를 찍어서 기록으로 남겼습니다.
+
+<br>
+
+---
+
+# 추가 과제 - GPU 가속 학습, 모델 저장, IoU·NMS
+
+10월 31일 수업에서 안내된 과제를 위 과제와 합쳐서 제출합니다.
+
+- `03_DL-and-GPU.ipynb`: MNIST `main_gpu()` 함수, CIFAR-10 학습 파트와 학습한 모델 파일(`.pth`)
+- `04_DL-Object-Detection.ipynb`: IoU, Confidence Thresholding, NMS 구현
+- 위 과제 보완: 학습한 MNIST 모델 저장, GPU 가속 방식 설명 추가
+
+<p align="center">
+  <img src="pictures/IoU.png" width="49%">
+  <img src="pictures/NMS_comparison.png" width="49%">
+</p>
+
+## 1. 추가된 파일
+
+```text
+261025/
+├── 261025_task.py             
+├── 261025_gpu_training.py     # MNIST main_gpu(), CIFAR-10 GPU 학습 및 모델 저장
+├── 261025_iou_nms.py          # IoU, Confidence Thresholding, NMS 구현
+├── pictures/
+│   ├── IoU.png                # IoU 결과
+│   ├── NMS_before.png         # NMS 적용 전 BBox
+│   └── NMS_comparison.png     # 직접 구현한 NMS와 OpenCV NMS 비교
+└── src/
+    ├── images/
+    │   └── two_apples1~3.png  # IoU 계산용 사과 이미지 3장
+    └── models/
+        ├── MNIST/
+        │   └── MNIST_CNN.pth    # 261025_task.py에서 학습한 MNIST 모델
+        └── CIFAR10/
+            └── CIFAR10_CNN.pth  # 261025_gpu_training.py에서 학습한 CIFAR-10 모델
+```
+
+- 각 파일에는 필요한 import, 함수, 모델 정의, 데이터 로딩과 학습 코드가 들어 있어 따로 실행할 수 있습니다.
+- `MNIST_CNN.pth`에는 `SimpleCNN`의 가중치(`state_dict`)만 저장됩니다.
+- `CIFAR10_CNN.pth`에는 모델 가중치, Optimizer 상태, 마지막 테스트 정확도, Epoch 수, 클래스 이름, 정규화 평균과 표준편차가 함께 저장됩니다.
+- MNIST와 CIFAR-10 데이터는 최초 실행 시 `src/datasets`에 다운로드되며, 용량이 커서 제출에는 포함하지 않았습니다.
+
+## 2. 동작 과정 및 결과
+
+### MNIST 모델 저장 및 불러오기 (위 과제 보완)
+
+- `261025_task.py`에서 학습을 마친 `SimpleCNN`의 가중치를 `torch.save(model.state_dict(), ...)`로 `src/models/MNIST/MNIST_CNN.pth`에 저장합니다.
+- 저장한 파일을 `torch.load(..., weights_only=True)`로 다시 불러와 새 `SimpleCNN`에 넣고, 모델 구조가 출력되는지 확인합니다.
+
+### MNIST 데이터셋 GPU 가속 학습 (`main_gpu()`)
+
+- 기존 `main_cpu()`와 같은 데이터셋, DataLoader, `SimpleCNN`, 손실 함수, Optimizer, Epoch 수를 사용합니다.
+- 장치만 `torch.device("cuda")`로 바꾸고, `model.to(device)`로 모델을 GPU로 옮깁니다. 배치 데이터는 기존 `train_one_epoch()`, `evaluate()` 안에서 `images.to(device)`, `labels.to(device)`로 GPU에 옮겨집니다.
+- GPU 연산은 비동기로 실행되므로, 시간을 재기 직전마다 `torch.cuda.synchronize()`를 호출해 GPU 작업이 끝난 시점까지 측정합니다.
+- 함수 마지막에 전체 학습 시간을 반환하고, CPU 학습 시간과 나누어 가속 배율을 출력합니다.
+
+| 실행 환경 | CPU 학습 시간 | GPU 학습 시간 | 가속 배율 |
+|---|---|---|---|
+| Google Colab (T4 GPU) | 56.29초 | 30.45초 | 1.85배 |
+| 실습실 Jetson Orin Nano (실습 노트북) | 514.61초 | 88.59초 | 5.81배 |
+
+- 두 환경 모두 3 Epoch 학습했고, 같은 시드를 사용해 CPU와 GPU의 정확도는 거의 같았습니다. Colab에서 3 Epoch 후 Train Accuracy는 CPU 97.89%, GPU 97.93%였습니다.
+- Colab은 CPU 성능이 높아 CPU 학습 시간이 짧았기 때문에, Jetson보다 가속 배율이 낮게 나왔습니다. MNIST 모델은 크기가 작아 GPU를 사용해도 이점이 크지 않을 수 있습니다.
+
+### CIFAR-10 이미지 분류 GPU 가속 학습과 모델 저장
+
+- 데이터 증강(`RandomCrop`, `RandomHorizontalFlip`)은 학습 데이터에만 적용하고, 정규화(`Normalize`)는 학습·테스트 데이터 모두에 적용합니다.
+- `ConvBlock` 3개, Global Average Pooling, Dropout, Linear로 구성된 `CIFAR10CNN`을 GPU로 옮기고, 측정 전에 GPU Warm-up을 실행합니다.
+- 기존 `train_one_epoch()`, `evaluate()`를 사용해 5 Epoch 동안 학습과 평가를 반복하고, 각 Epoch 및 전체 학습 시간을 출력합니다.
+- 학습이 끝나면 Loss, Accuracy 그래프를 출력하고, 모델을 `src/models/CIFAR10/CIFAR10_CNN.pth`에 저장합니다.
+- 저장한 파일을 다시 불러와 테스트 이미지 40장을 분류합니다. 틀린 예측은 제목을 빨간색으로 표시합니다.
+- 학습 설정: 5 Epoch, 학습 Batch 32, 테스트 Batch 128, `AdamW`(learning rate 0.001), `CrossEntropyLoss`, Dropout 0.3, 시드 42, 학습 파라미터 1,148,874개
+
+<p align="center">
+  <img src="pictures/CIFAR_Loss.png" width="33%">
+  <img src="pictures/CIFAR_Accuracy.png" width="33%">
+  <img src="pictures/CIFAR_Prediction.png" width="33%">
+</p>
+
+- Google Colab(T4 GPU)에서 5 Epoch 학습한 모델을 저장했으며, 저장된 마지막 테스트 정확도는 80.82%입니다.
+- 5 Epoch는 CIFAR-10을 충분히 학습하기에 짧아서, 분류 결과에서 일부 이미지는 잘못 분류됩니다.
+
+### IoU 계산
+
+- `cv2.boundingRect()`가 반환하는 `(x, y, w, h)`를 `convert_bbox_coord()`로 `(x1, y1, x2, y2)`로 바꿉니다. 우측 하단 좌표는 `(x + w, y + h)`입니다.
+- `calculate_iou()`에서는 두 BBox 좌표의 `max`, `min`으로 교집합 박스를 구하고, 겹치지 않으면 너비와 높이가 0이 되도록 `max(0, ...)`를 적용합니다.
+- 합집합 넓이는 두 BBox 넓이의 합에서 교집합 넓이를 한 번 빼서 구합니다.
+- 합집합 넓이가 0이면 0으로 나누지 않고 0을 반환해 `ZeroDivisionError`를 막았습니다.
+
+<p align="center">
+  <img src="pictures/IoU.png" width="90%">
+</p>
+
+- 첫 번째 사진은 두 사과의 BBox가 겹치지 않아 IoU가 0.0000으로 나왔습니다.
+- 두 번째 사진은 IoU 0.3046, 세 번째 사진은 IoU 0.4934로, 두 사과가 많이 겹칠수록 IoU가 커지는 것을 확인했습니다.
+- 두 값은 실습 파일에 안내된 값(0.3046, 0.4934)과 일치합니다.
+
+### Confidence Thresholding과 NMS
+
+- `prune_low_conf()`는 Confidence Score가 임계값(0.5) 이상인 BBox만 남깁니다.
+- `apply_nms()`는 `np.argsort()`로 Confidence가 높은 순서의 인덱스를 구한 뒤, 가장 높은 BBox를 선택하고 남은 BBox와의 IoU를 계산합니다.
+- IoU가 임계값보다 큰 BBox는 같은 객체를 중복으로 잡은 것으로 보고 제거하며, 남은 BBox가 없을 때까지 선택과 제거를 반복합니다.
+- IoU 계산에는 앞에서 구현한 `calculate_iou()`를 그대로 사용했습니다.
+- Confidence Thresholding 결과에 NMS(IoU 임계값 0.2)를 적용하고, OpenCV `cv2.dnn.NMSBoxes()`를 사용한 `apply_nms_cv2()`와 결과를 비교합니다.
+
+<p align="center">
+  <img src="pictures/NMS_before.png" width="40%">
+  <img src="pictures/NMS_comparison.png" width="58%">
+</p>
+
+- 랜덤으로 만든 BBox 20개 중 Confidence 0.5 미만인 3개가 먼저 제거되어 17개가 남았습니다.
+- NMS를 적용하자 겹치는 BBox가 정리되어 Confidence 0.80, 0.72, 0.64, 0.62인 BBox 4개만 남았습니다.
+- 직접 구현한 NMS와 OpenCV NMS가 남긴 BBox가 같은지 비교한 결과 `True`가 출력되어, 두 결과가 일치하는 것을 확인했습니다.
+- 남은 BBox끼리도 일부 겹쳐 보이지만, 교집합에 비해 합집합이 넓어 IoU가 임계값 0.2 이하인 경우입니다.
+
+## 3. 실행 방법
+
+각 파일이 있는 261025 폴더 안에서 실행합니다.
+
+```bash
+python 261025_task.py          # 모델 성능 확인 ~ CuPy convolution, MNIST 모델 저장
+python 261025_gpu_training.py  # MNIST CPU/GPU 비교, CIFAR-10 학습 및 모델 저장
+python 261025_iou_nms.py       # IoU, NMS
+```
+
+- 추가로 필요한 라이브러리: scikit-image (`261025_iou_nms.py`의 NMS 실습 이미지)
+- `261025_iou_nms.py`는 GPU 없이도 실행할 수 있습니다.
+- `261025_gpu_training.py`는 CUDA GPU가 필요하며, MNIST CPU 학습과 GPU 학습, CIFAR-10 학습을 차례로 진행하므로 시간이 오래 걸립니다.
+- CIFAR-10(약 163MB)은 최초 실행 시 다운로드하므로 인터넷 연결이 필요하고, 다운로드 시간이 길 수 있습니다.
+- 그래프 창이 표시되면 확인 후 닫아야 다음 코드가 실행됩니다.
+
+### 제출한 모델 불러오기
+
+학습하지 않고 제출한 `.pth` 파일만 불러와 확인할 수 있습니다. 모델 클래스(`SimpleCNN`, `ConvBlock`, `CIFAR10CNN`)는 실습 파일과 같은 정의를 사용합니다. CIFAR-10 모델은 GPU에서 저장했으므로, GPU가 없는 환경에서는 `map_location="cpu"`로 불러옵니다.
+
+```python
+import torch
+
+# MNIST: 가중치(state_dict)만 저장
+mnist_model = SimpleCNN()
+mnist_model.load_state_dict(
+    torch.load("src/models/MNIST/MNIST_CNN.pth", map_location="cpu", weights_only=True)
+)
+
+# CIFAR-10: 가중치와 학습 정보를 딕셔너리로 저장
+checkpoint = torch.load("src/models/CIFAR10/CIFAR10_CNN.pth", map_location="cpu", weights_only=True)
+cifar_model = CIFAR10CNN()
+cifar_model.load_state_dict(checkpoint["model_state_dict"])
+print(checkpoint["epochs"], checkpoint["test_accuracy"])
+```
+
+## 4. 아이디어와 구현 내용
+
+### GPU 가속 방식 정리 (잔상 효과, Convolution)
+
+- CPU(NumPy) 구현은 출력 픽셀을 Python 반복문으로 하나씩 계산합니다. 잔상 효과는 출력 픽셀마다 이동 거리 32개를 반복하고, convolution은 출력 픽셀마다 3×3 영역을 잘라 `np.sum()`으로 가중합을 구합니다. 1280×720 이미지 기준으로 출력 픽셀 약 92만 개를 하나씩 처리합니다.
+- GPU(CuPy) 구현은 반복 대상을 바꿨습니다. 잔상 효과는 이동 거리(32번)만, convolution은 커널 원소(3×3 = 9번)만 Python에서 반복합니다.
+- 반복할 때마다 이미지 전체를 슬라이싱한 배열에 가중치를 곱해 출력 배열에 더합니다. 이 배열 연산은 GPU에서 수많은 픽셀을 동시에 처리하므로, 픽셀 단위 반복이 사라진 만큼 빨라집니다.
+- 정확한 시간 측정을 위해 GPU 연산 전에 작은 배열로 워밍업을 하고, 측정 전후에 `cp.cuda.Stream.null.synchronize()`로 GPU 연산이 끝날 때까지 기다렸습니다.
+- 계산 시간만 비교한 가속 배율과, CPU↔GPU 데이터 복사 시간을 포함한 가속 배율을 따로 구해 데이터 이동 비용도 확인했습니다.
+
+### 추가 과제 구현 내용
+
+- `main_gpu()`는 `main_cpu()`를 그대로 가져온 뒤 장치 지정과 `torch.cuda.synchronize()`만 추가해, CPU와 GPU의 차이가 장치에서만 나도록 했습니다.
+- CIFAR-10 학습 루프는 MNIST 학습 코드와 같은 구조로 작성하고, 시간 측정 전후에 `torch.cuda.synchronize()`를 넣었습니다.
+- IoU 함수는 실습 설명에 나온 교집합 좌표와 너비·높이 계산식을 그대로 사용하고, 합집합 계산과 0 나누기 처리를 추가했습니다.
+- `prune_low_conf()`는 반복문과 조건문으로 임계값 이상인 BBox와 점수를 함께 골라냅니다.
+- `apply_nms()`는 실습 TODO의 안내대로 `np.argsort()`로 정렬 인덱스를 구하고, 앞에서 만든 `calculate_iou()`를 재사용했습니다.
+- 실습 파일의 NMS 적용 코드는 Thresholding 결과를 받은 뒤 다시 원래 `boxes`에 NMS를 적용하고 있어서, Thresholding 결과(`new_boxes`, `new_scores`)에 NMS를 적용하도록 바꿨습니다. 이렇게 해야 Thresholding과 NMS를 함께 수행하는 OpenCV 결과와 같은 조건으로 비교할 수 있습니다.
+- 실습 파일의 결과 그림은 NMS 후 BBox에 원래 `scores` 리스트의 점수를 표시하고 있어서, 남은 BBox의 점수(`new_scores`, `cv2_new_scores`)를 표시하도록 바꿨습니다.
+- NMS 실습의 BBox는 매번 랜덤으로 만들어지므로, `random.seed(42)`로 난수를 고정해 같은 결과를 다시 확인할 수 있도록 했습니다.
+
+## 5. 한계와 참고 사항
+
+- `main_gpu()`와 CIFAR-10 학습은 CUDA GPU가 있어야 실행됩니다. CUDA를 사용할 수 없으면 CIFAR-10 부분에서 `RuntimeError`가 발생합니다.
+- 학습 시간과 가속 배율은 실행 환경에 따라 크게 달라집니다. 위 표처럼 같은 코드라도 Colab과 Jetson의 결과가 달랐습니다.
+- CIFAR-10은 5 Epoch만 학습하므로 충분히 수렴하지 않았습니다.
+- `.pth`에는 Optimizer 상태도 함께 저장되어, 모델 가중치만 저장할 때보다 파일이 커집니다.
+- NMS에서 Confidence Score가 완전히 같은 BBox가 있으면, 직접 구현한 정렬과 OpenCV의 정렬 순서가 달라 남는 BBox가 다를 수 있습니다. 실습처럼 점수를 실수 난수로 만들 때는 같은 점수가 나올 가능성이 매우 낮습니다.
+- IoU는 픽셀 좌표의 차이(`x2 - x1`)로 너비를 계산하며, 경계 픽셀을 1칸 더 세는 방식(`x2 - x1 + 1`)은 사용하지 않았습니다.
+- 과제 수행은 Google Colab에서 진행하였습니다. 런타임 유형을 T4 GPU로 변경하여 CUPY 같은 GPU 연산 기능들도 사용할 수 있도록 테스트해보았습니다.
