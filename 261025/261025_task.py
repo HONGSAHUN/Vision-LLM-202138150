@@ -470,6 +470,29 @@ for layer_name in layer_names:
 
 plt.show()
 
+### 모델 저장 및 불러오기 (실습 파일 18번 셀)
+
+# 학습된 MNIST 모델의 가중치를 .pth 파일로 저장
+torch.save(
+    model.state_dict(),
+    "src/models/MNIST/MNIST_CNN.pth",
+)
+
+# 저장한 파일을 다시 불러와 정상적으로 불러와지는지 확인
+loaded_model = SimpleCNN()
+
+state_dict = torch.load(
+    "src/models/MNIST/MNIST_CNN.pth",
+    map_location="cpu",
+    weights_only=True,
+)
+
+loaded_model.load_state_dict(state_dict)
+loaded_model.to(device)
+loaded_model.eval()
+
+print(loaded_model)
+
 ### 이미지 잔상 효과 구현
 
 IMAGE_PATH = "src/images/seagull.jpg"
@@ -849,5 +872,3 @@ for ax in plt.gcf().axes:
     ax.axis("off")
 
 plt.show()
-
-
