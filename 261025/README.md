@@ -5,10 +5,10 @@
 앞에서 배운 CNN 학습 코드와 Feature Map 시각화 함수를 사용하고, NumPy와 CuPy로 이미지 잔상 효과와 convolution을 구현하여 CPU와 GPU의 결과 및 처리 시간을 비교하는 과제를 수행하였습니다.
 
 <p align="center">
-  <img src="pictures/CNN_Accuracy.jpeg" width="24%">
-  <img src="pictures/Figure1.jpeg" width="24%">
-  <img src="pictures/seagull2.jpeg" width="24%">
-  <img src="pictures/Comparison2.jpeg" width="24%">
+  <img src="pictures/CNN_Accuracy.png" width="24%">
+  <img src="pictures/Figure1.png" width="24%">
+  <img src="pictures/seagull2.png" width="24%">
+  <img src="pictures/Comparison2.png" width="24%">
 </p>
 
 ## 1. 파일 구조와 역할
@@ -36,8 +36,8 @@
 - Accuracy는 NumPy 배열로 변환한 뒤 100을 곱해 백분율로 표시합니다.
 
 <p align="center">
-  <img src="pictures/CNN_Loss.jpeg" width="24%">
-  <img src="pictures/CNN_Accuracy.jpeg" width="24%">
+  <img src="pictures/CNN_Loss.png" width="24%">
+  <img src="pictures/CNN_Accuracy.png" width="24%">
 </p>
 
 - Loss 변화 : Epoch가 증가하면서 Train Loss는 0.3133에서 0.0666으로, Test Loss는 0.0953에서 0.0495로 감소했습니다. 학습 데이터뿐 아니라 테스트 데이터에서도 Loss가 감소하는 것을 확인했습니다.
@@ -53,17 +53,17 @@
 - 색상은 `viridis`를 사용합니다.
 
 <p align="center">
-  <img src="pictures/Figure1.jpeg" width="24%">
-  <img src="pictures/Figure2.jpeg" width="24%">
-  <img src="pictures/Figure3.jpeg" width="24%">
-  <img src="pictures/Figure4.jpeg" width="24%">
+  <img src="pictures/Figure1.png" width="24%">
+  <img src="pictures/Figure2.png" width="24%">
+  <img src="pictures/Figure3.png" width="24%">
+  <img src="pictures/Figure4.png" width="24%">
 </p>
 
 <p align="center">
-  <img src="pictures/Figure5.jpeg" width="24%">
-  <img src="pictures/Figure6.jpeg" width="24%">
-  <img src="pictures/Figure7.jpeg" width="24%">
-  <img src="pictures/Figure8.jpeg" width="24%">
+  <img src="pictures/Figure5.png" width="24%">
+  <img src="pictures/Figure6.png" width="24%">
+  <img src="pictures/Figure7.png" width="24%">
+  <img src="pictures/Figure8.png" width="24%">
 </p>
 
 - 첫 번째 convolution 결과에서는 숫자 7의 가로획과 대각선 형태가 나타났습니다. 같은 이미지를 입력해도 채널마다 강조되는 부분과 출력 형태가 다르게 나타나는 것을 확인했습니다.
@@ -87,9 +87,9 @@
 - 원본, CPU 잔상, GPU 잔상 이미지를 출력하여 비교합니다.
 
 <p align="center">
-  <img src="pictures/seagull1.jpeg" width="33%">
-  <img src="pictures/seagull2.jpeg" width="33%">
-  <img src="pictures/Comparison1.jpeg" width="33%">
+  <img src="pictures/seagull1.png" width="33%">
+  <img src="pictures/seagull2.png" width="33%">
+  <img src="pictures/Comparison1.png" width="33%">
 </p>
 
 - 첫 번째 사진은 잔상 효과를 적용하기 전의 흑백 이미지입니다. 갈매기의 눈, 부리와 머리 경계가 비교적 선명하게 나타납니다.
@@ -109,8 +109,8 @@
 - ReLU를 적용한 결과끼리 최대 절대 차이를 구하고, 가로·세로 edge 이미지를 비교합니다.
 
 <p align="center">
-  <img src="pictures/seagull3.jpeg" width="49%">
-  <img src="pictures/Comparison2.jpeg" width="49%">
+  <img src="pictures/seagull3.png" width="49%">
+  <img src="pictures/Comparison2.png" width="49%">
 </p>
 
 - 방향별 필터를 적용한 결과, 갈매기 이미지에서 일부 경계가 검출됐습니다. 결과는 대부분 어둡고 일부 경계만 희미하게 나타났습니다. 음수 편향과 ReLU를 적용하면서 약한 반응과 음수 출력이 제거된 결과로 해석할 수 있습니다.
