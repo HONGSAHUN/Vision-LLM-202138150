@@ -5,10 +5,10 @@
 앞에서 배운 CNN 학습 코드와 Feature Map 시각화 함수를 사용하고, NumPy와 CuPy로 이미지 잔상 효과와 convolution을 구현하여 CPU와 GPU의 결과 및 처리 시간을 비교하는 과제를 수행하였습니다.
 
 <p align="center">
-  <img src="CNN_Loss.jpeg" width="25%">
-  <img src="CNN_Accuracy.jpeg" width="25%">
-  <img src="Comparison1.jpeg" width="25%">
-  <img src="Comparison2.jpeg" width="25%">
+  <img src="pictures/CNN_Loss.jpeg" width="24%">
+  <img src="pictures/CNN_Accuracy.jpeg" width="24%">
+  <img src="pictures/Comparison1.jpeg" width="24%">
+  <img src="pictures/Comparison2.jpeg" width="24%">
 </p>
 
 ## 1. 파일 구조와 역할
