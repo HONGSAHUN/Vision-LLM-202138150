@@ -5,10 +5,10 @@
 앞에서 배운 CNN 학습 코드와 Feature Map 시각화 함수를 사용하고, NumPy와 CuPy로 이미지 잔상 효과와 convolution을 구현하여 CPU와 GPU의 결과 및 처리 시간을 비교하는 과제를 수행하였습니다.
 
 <p align="center">
-  <img src="pictures/CNN_Loss.jpeg" width="24%">
   <img src="pictures/CNN_Accuracy.jpeg" width="24%">
-  <img src="pictures/Comparison1.jpeg" width="24%">
-  <img src="pictures/Comparison2.jpeg" width="24%">
+  <img src="pictures/Figure1.jpeg" width="24%">
+  <img src="pictures/seagull2.jpeg" width="24%">
+  <img src="pictures/Comparison2" width="24%">
 </p>
 
 ## 1. 파일 구조와 역할
@@ -26,7 +26,7 @@
 - MNIST 데이터는 최초 실행 시 `src/datasets`에 다운로드됩니다.
 - `src/images/seagull.jpg` 이미지 파일도 폴더에 넣어서, 261025 폴더 만으로도 파일을 실행할 수 있도록 만들었습니다.
 
-## 2. 동작 과정
+## 2. 동작 과정 및 결과 사진
 
 ### 모델 성능 확인
 
@@ -34,6 +34,11 @@
 - 각 Epoch의 Train/Test Loss와 Accuracy를 저장하고, 학습 결과와 소요 시간을 출력합니다.
 - 저장한 기록으로 Loss와 Accuracy 그래프를 출력합니다.
 - Accuracy는 NumPy 배열로 변환한 뒤 100을 곱해 백분율로 표시합니다.
+
+<p align="center">
+  <img src="pictures/CNN_Loss.jpeg" width="24%">
+  <img src="pictures/CNN_Accuracy.jpeg" width="24%">
+</p>
 
 ### 학습된 모델의 Feature Map 확인
 
@@ -43,6 +48,20 @@
 - 기존 `show_feature_maps()`를 사용해 Conv1은 8개, Conv2는 16개를 출력합니다.
 - conv1, relu1, pool1, conv2, relu2, pool2는 각각 4개씩 출력하여 비교합니다.
 - 색상은 `viridis`를 사용합니다.
+
+<p align="center">
+  <img src="pictures/Figure1.jpeg" width="24%">
+  <img src="pictures/Figure2.jpeg" width="24%">
+  <img src="pictures/Figure3.jpeg" width="24%">
+  <img src="pictures/Figure4.jpeg" width="24%">
+</p>
+
+<p align="center">
+  <img src="pictures/Figure5.jpeg" width="24%">
+  <img src="pictures/Figure6.jpeg" width="24%">
+  <img src="pictures/Figure7.jpeg" width="24%">
+  <img src="pictures/Figure8.jpeg" width="24%">
+</p>
 
 ### 이미지 잔상 효과 구현
 
@@ -55,6 +74,12 @@
 - 복사 시간을 제외한 가속 배율과 포함한 가속 배율을 각각 구합니다.
 - 원본, CPU 잔상, GPU 잔상 이미지를 출력하여 비교합니다.
 
+<p align="center">
+  <img src="pictures/seagull1.jpeg" width="33%">
+  <img src="pictures/seagull2.jpeg" width="33%">
+  <img src="pictures/Comparison1.jpeg" width="33%">
+</p>
+
 ### Convolution 연산
 
 - 실습에서 사용한 가로·세로 edge 필터와 편향을 사용합니다.
@@ -65,6 +90,11 @@
 - GPU 결과를 `cp.asnumpy()`로 복사한 뒤 기존 `relu()`를 적용합니다.
 - CPU/GPU 처리 시간과 가속 배율을 출력합니다.
 - ReLU를 적용한 결과끼리 최대 절대 차이를 구하고, 가로·세로 edge 이미지를 비교합니다.
+
+<p align="center">
+  <img src="pictures/seagull3.jpeg" width="49%">
+  <img src="pictures/Comparison2.jpeg" width="49%">
+</p>
 
 ## 3. 실행 방법
 
