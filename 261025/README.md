@@ -8,7 +8,7 @@
   <img src="pictures/CNN_Accuracy.jpeg" width="24%">
   <img src="pictures/Figure1.jpeg" width="24%">
   <img src="pictures/seagull2.jpeg" width="24%">
-  <img src="pictures/Comparison2" width="24%">
+  <img src="pictures/Comparison2.jpeg" width="24%">
 </p>
 
 ## 1. 파일 구조와 역할
@@ -140,3 +140,4 @@ python 261025_task.py
 - CPU는 픽셀별 반복문을 사용하고 GPU는 배열 전체를 계산하므로, 가속 배율에는 장치 성능뿐 아니라 계산 방식의 차이도 포함됩니다.
 - 실제 학습 결과와 GPU 처리 시간은 실행 환경에 따라 달라질 수 있습니다.
 - 과제 수행은 Google Colab에서 진행하였습니다. 런타임 유형을 T4 GPU로 변경하여 CUPY 같은 GPU 연산 기능들도 사용할 수 있도록 테스트해보았습니다.
+- 최종 테스트는 실습실의 엔비디아 젯슨 오린 나노에서 직접 진행해보았습니다. 진행한 결과를 찍어서 기록으로 남겼습니다.
