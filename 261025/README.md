@@ -222,7 +222,7 @@ txt=f"{new_scores[i]:.2f}"
 ```
 
 - NMS 후 남은 BBox의 순서는 원래 목록의 순서와 달라, `scores[i]`를 쓰면 BBox와 점수가 맞지 않습니다.
-- 새래운 NMS는 `new_scores`, OpenCV NMS는 `cv2_new_scores`를 사용해, 각 BBox 위에 자기 점수가 표시되도록 했습니다.
+- 새로운 NMS는 `new_scores`, OpenCV NMS는 `cv2_new_scores`를 사용해, 각 BBox 위에 자기 점수가 표시되도록 했습니다.
 
 **3. 난수 고정**
 
@@ -239,5 +239,5 @@ random.seed(42)
 - CPU는 픽셀별 반복문, GPU는 배열 연산을 사용하므로 가속 배율에는 장치 성능뿐 아니라 계산 방식의 차이도 포함됩니다.
 - Convolution 시간에는 두 방향 필터 계산만 포함하고, ReLU, 결과 복사, 시각화는 제외했습니다.
 - GPU Convolution은 `stride=1` 기준으로 구현했으며, 다른 stride 값은 막지 않아 잘못된 결과가 나올 수 있습니다.
-- CIFAR-10은 5 Epoch만 학습해 충분히 수렴하지 않았습니다. 그러나 추가로 학습하면 시간이 너무 오래 걸릴 수 있음을 알 수 있습니다.
+- CIFAR-10은 5 Epoch만 학습해 충분히 수렴하지 않았습니다. Epoch를 늘리면 정확도는 더 오를 수 있지만, 그만큼 학습 시간도 늘어납니다.
 - NMS에서 Confidence가 완전히 같은 BBox가 있으면 OpenCV와 정렬 순서가 달라 결과가 다를 수 있습니다.
