@@ -25,7 +25,7 @@
         └── CIFAR10/CIFAR10_CNN.pth    # 학습한 CIFAR-10 모델 (가중치 + 학습 정보)
 ```
 
-- 각 파일은 실습 파일에서 필요한 함수와 모델 정의를 가져와, 261025 폴더만으로 따로 실행할 수 있습니다.
+- 각 파일은 실습 파일에서 필요한 함수와 모델 정의를 가져와, 261025 폴더만으로 실행이 가능합니다.
 - MNIST, CIFAR-10 데이터는 최초 실행 시 `src/datasets`에 다운로드되며, 용량이 커서 제출에는 포함하지 않았습니다.
 
 ## 2. 실행 방법
@@ -40,7 +40,6 @@ python 261025_iou_nms.py
 
 - 필요한 라이브러리: numpy, matplotlib, opencv-python, torch, torchvision, cupy, scikit-image
 - `261025_task.py`, `261025_gpu_training.py`는 CUDA GPU가 필요하고, `261025_iou_nms.py`는 GPU 없이 실행됩니다.
-- 데이터셋 다운로드에 인터넷 연결이 필요하며, CIFAR-10(약 163MB)은 다운로드가 오래 걸릴 수 있습니다.
 - 그래프 창을 닫아야 다음 코드가 실행됩니다.
 
 **제출한 모델 불러오기** (모델 클래스는 실습 파일과 같은 정의 사용)
@@ -154,7 +153,7 @@ print(checkpoint["epochs"], checkpoint["test_accuracy"])   # 5, 0.8082
 
 ### 3-6. CIFAR-10 GPU 학습과 모델 저장
 
-- 학습 데이터에만 데이터 증강(`RandomCrop`, `RandomHorizontalFlip`)을, 학습·테스트 모두에 정규화를 적용합니다.
+- 학습 데이터에만 데이터 증강(`RandomCrop`, `RandomHorizontalFlip`)을, 학습과 테스트 데이터 모두에 정규화를 적용합니다.
 - `ConvBlock` 3개, Global Average Pooling, Dropout, Linear로 구성된 `CIFAR10CNN`을 GPU에서 Warm-up 후 학습합니다.
 - 학습 설정: 5 Epoch, Batch 32(학습)/128(테스트), `AdamW`(lr 0.001), `CrossEntropyLoss`, Dropout 0.3, 시드 42, 파라미터 1,148,874개
 - 학습 후 모델 가중치, Optimizer 상태, 테스트 정확도, Epoch 수, 클래스 이름, 정규화 값을 `CIFAR10_CNN.pth`에 저장하고, 다시 불러와 테스트 이미지 40장을 분류합니다.
@@ -165,10 +164,10 @@ print(checkpoint["epochs"], checkpoint["test_accuracy"])   # 5, 0.8082
   <img src="pictures/CIFAR_Prediction.png" width="32%">
 </p>
 
-- Google Colab(T4 GPU)에서 학습했으며, 저장된 최종 Test Accuracy는 **80.82%** 입니다.
-- 그래프 기준으로 Train Loss는 약 1.29 → 0.56, Test Loss는 약 0.94 → 0.58로 감소했고, 마지막 Epoch에서 Train과 Test 정확도가 비슷해 과적합은 크지 않았습니다.
+- Google Colab(T4 GPU)에서 학습했으며, 저장된 최종 Test Accuracy는 80.82% 입니다.
+- 그래프 기준으로 Train Loss는 약 1.29 → 0.56, Test Loss는 약 0.94 → 0.58로 감소했고, 마지막 Epoch에서 Train과 Test 정확도가 비슷해 과적합은 크지 않았음을 볼 수 있었습니다.
 - 초반에 Test Accuracy가 더 높은 것은 학습할 때만 데이터 증강과 Dropout이 적용되기 때문으로 해석할 수 있습니다.
-- 불러온 모델로 40장 중 32장을 맞혔고, 개↔말·사슴·개구리, 자동차↔트럭처럼 비슷한 클래스에서 틀렸습니다.
+- 불러온 모델로 40장 중 32장을 맞혔고, 강아지 ↔ 말,사슴,개구리, 자동차 ↔ 트럭처럼 비슷한 클래스에서 틀렸습니다.
 
 ### 3-7. IoU
 
@@ -195,17 +194,50 @@ print(checkpoint["epochs"], checkpoint["test_accuracy"])   # 5, 0.8082
 - BBox 20개 → Thresholding 후 17개 → NMS 후 4개(Confidence 0.80, 0.72, 0.64, 0.62)가 남았습니다.
 - 직접 구현한 NMS와 OpenCV NMS의 결과가 같았습니다(`Custom NMS == CV2 NMS: True`).
 
-**실습 코드에서 바꾼 점**
-- 실습 코드는 Thresholding 결과 대신 원래 `boxes`에 NMS를 적용하고 있어, Thresholding 결과에 적용하도록 바꿨습니다.
-- 결과 그림에 원래 `scores`가 아닌, 남은 BBox의 점수가 표시되도록 바꿨습니다.
-- 랜덤 BBox 결과를 다시 확인할 수 있도록 `random.seed(42)`로 난수를 고정했습니다.
+ #### 실습 코드에서 바꾼 점
+
+**1. Thresholding 결과에 NMS 적용**
+
+```python
+# 실습 코드: Thresholding 결과를 버리고 원래 boxes 20개에 NMS 적용
+new_boxes, new_scores = prune_low_conf(boxes, scores)
+new_boxes, new_scores = apply_nms(boxes, scores, iou_threshold=0.2)
+
+# 수정: Thresholding으로 걸러낸 BBox에 NMS 적용
+new_boxes, new_scores = prune_low_conf(boxes, scores)
+new_boxes, new_scores = apply_nms(new_boxes, new_scores, iou_threshold=0.2)
+```
+
+- 실습 코드는 `prune_low_conf()`의 결과를 다음 줄에서 사용하지 않아, Confidence Thresholding이 실제로는 적용되지 않았음을 발견하였습니다.
+- 걸러낸 결과에 NMS를 적용하도록 바꿔, `낮은 점수 제거 → 중복 BBox 제거`라는 NMS 순서를 따르도록 했습니다.
+
+**2. BBox에 맞는 점수 표시**
+
+```python
+# 실습 코드: 남은 BBox 4개에 원래 scores 목록의 0~3번째 점수를 표시
+txt=f"{scores[i]:.2f}"
+
+# 수정: 남은 BBox 각각의 점수를 표시
+txt=f"{new_scores[i]:.2f}"
+```
+
+- NMS 후 남은 BBox의 순서는 원래 목록의 순서와 달라, `scores[i]`를 쓰면 BBox와 점수가 맞지 않습니다.
+- 새래운 NMS는 `new_scores`, OpenCV NMS는 `cv2_new_scores`를 사용해, 각 BBox 위에 자기 점수가 표시되도록 했습니다.
+
+**3. 난수 고정**
+
+```python
+random.seed(42)
+```
+
+- NMS 실습의 BBox 위치와 점수는 `randint()`, `gauss()`로 만들어져 실행할 때마다 달라집니다.
+- 난수를 고정해 누가 실행해도 같은 BBox가 생성되도록 했고, 위의 `20개 → 17개 → 4개` 결과를 그대로 다시 확인할 수 있습니다.
 
 ## 4. 한계와 참고 사항
 
-- 학습 시간과 가속 배율은 실행 환경에 따라 크게 달라집니다. 개발은 Google Colab(T4 GPU)에서, 잔상 효과와 Convolution의 최종 테스트는 실습실 Jetson Orin Nano에서 진행했습니다.
+- 학습 시간과 가속 배율은 실행 환경에 따라 달라집니다. 제출한 모델 파일(`.pth`)과 CIFAR-10 결과, MNIST CPU/GPU 비교의 Colab 결과는 Google Colab(T4 GPU)에서 실행하였고, MNIST 성능 확인, 잔상 효과, Convolution의 결과 사진과 처리 시간, MNIST 비교의 Jetson 결과는 실습실 Jetson Orin Nano에서 진행을 하였습니다.
 - CPU는 픽셀별 반복문, GPU는 배열 연산을 사용하므로 가속 배율에는 장치 성능뿐 아니라 계산 방식의 차이도 포함됩니다.
 - Convolution 시간에는 두 방향 필터 계산만 포함하고, ReLU, 결과 복사, 시각화는 제외했습니다.
 - GPU Convolution은 `stride=1` 기준으로 구현했으며, 다른 stride 값은 막지 않아 잘못된 결과가 나올 수 있습니다.
-- CIFAR-10은 5 Epoch만 학습해 충분히 수렴하지 않았습니다.
+- CIFAR-10은 5 Epoch만 학습해 충분히 수렴하지 않았습니다. 그러나 추가로 학습하면 시간이 너무 오래 걸릴 수 있음을 알 수 있습니다.
 - NMS에서 Confidence가 완전히 같은 BBox가 있으면 OpenCV와 정렬 순서가 달라 결과가 다를 수 있습니다.
-- IoU는 `x2 - x1`로 너비를 계산하며, 경계 픽셀을 1칸 더 세는 방식(`x2 - x1 + 1`)은 사용하지 않았습니다.
