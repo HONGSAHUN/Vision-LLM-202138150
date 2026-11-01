@@ -1,5 +1,5 @@
 ### 261025_iou_nms.py 독립 실행을 위해, 04_DL-Object-Detection.ipynb 실습 파일에서 필요한 내용을 가져왔습니다.
-### 과제 범위: B. Intersection over Union (IoU), C. Non-Maximum Suppression (NMS)
+### 과제 범위: Intersection over Union (IoU), Non-Maximum Suppression (NMS)
 
 import random
 from random import randint, gauss
