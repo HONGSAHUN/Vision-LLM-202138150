@@ -13,9 +13,9 @@
 
 ```text
 261025/
-├── 261025_task.py             # 03: 모델 성능 확인 ~ CuPy Convolution
-├── 261025_gpu_training.py     # 03: MNIST main_gpu(), CIFAR-10 학습
-├── 261025_iou_nms.py          # 04: IoU, NMS
+├── 261025_task.py             # 모델 성능 확인 ~ CuPy Convolution
+├── 261025_gpu_training.py     # MNIST main_gpu(), CIFAR-10 학습
+├── 261025_iou_nms.py          # IoU, NMS
 ├── README.md
 ├── pictures/                  # 결과 사진
 └── src/
