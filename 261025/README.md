@@ -1,4 +1,4 @@
-# 261025 과제 - 딥러닝 GPU 가속과 객체 탐지 기초
+# 261025 과제 - 딥러닝 GPU 가속과 객체 탐지
 
 `03_DL-and-GPU.ipynb`와 `04_DL-Object-Detection.ipynb`의 과제를 구현했습니다. 지난주 과제(CuPy 잔상 효과, Convolution)와 이번 주 과제(MNIST·CIFAR-10 GPU 학습, IoU, NMS)를 함께 제출합니다.
 
