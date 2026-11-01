@@ -1,5 +1,5 @@
-### 261025_gpu_training.py 독립 실행을 위해, 03_DL-and-GPU.ipynb 실습 파일에서 필요한 내용을 가져왔습니다.
-### 과제 범위: I. MNIST 데이터셋 GPU 가속 학습 (main_gpu), J. CIFAR-10 이미지 분류 GPU 가속 학습 + 모델 저장 (.pth)
+### 261025_gpu_training.py 독립 실행을 위해 03_DL-and-GPU.ipynb 실습 파일에서 필요한 내용을 가져왔습니다.
+### 과제 범위: MNIST 데이터셋 GPU 가속 학습 (main_gpu), CIFAR-10 이미지 분류 GPU 가속 학습 + 모델 저장 (.pth)
 
 import time
 import random
