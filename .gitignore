@@ -1,2 +1,10 @@
 src/models/**
 .env
+.venv/
+.piper_venv/
+whisper.cpp/
+src/audio/
+src/json/
+src/output/
+*.engine
+src/datasets/husaero/calibration.yaml
