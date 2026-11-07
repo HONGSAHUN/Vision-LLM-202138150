@@ -5,8 +5,8 @@ from ultralytics import YOLO
 
 
 YOLO_MODEL_PATH = "../src/models/YOLO/yolo11n_int8.engine"
-OUTPUT_IMAGE_PATH = "src/output/vision_output.jpg"
-TEMP_IMAGE_PATH = "src/output/vision_output_temp.jpg"
+OUTPUT_IMAGE_PATH = "../src/output/vision_output.jpg"
+TEMP_IMAGE_PATH = "../src/output/vision_output_temp.jpg"
 
 
 yolo = YOLO(YOLO_MODEL_PATH)
