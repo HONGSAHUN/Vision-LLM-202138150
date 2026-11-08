@@ -13,15 +13,15 @@ Project01의 피드백을 반영해, 이번에는 **스테이트 머신**으로 
 
 ### 구현 영상
 
-[![테스트 영상](dji.mp4)](https://github.com/user-attachments/assets/52f2f2d4-0a0e-4422-803c-735e52fb133f)
+https://github.com/user-attachments/assets/52f2f2d4-0a0e-4422-803c-735e52fb133f
 
 <br>
 
-[![적기 출현 영상](enemy.mp4)](https://github.com/user-attachments/assets/9f54c09c-8d9b-44d0-9724-74574c777b84)
+https://github.com/user-attachments/assets/9f54c09c-8d9b-44d0-9724-74574c777b84
 
 <br>
 
-[![아군 출현 영상](friendly.mp4)](https://github.com/user-attachments/assets/5cb904dd-8dca-499b-8c07-90ff79691123)
+https://github.com/user-attachments/assets/5cb904dd-8dca-499b-8c07-90ff79691123
 
 <br>
 
