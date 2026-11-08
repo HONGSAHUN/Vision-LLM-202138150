@@ -20,7 +20,7 @@ GEMMA_MODEL_PATH = path("src/models/Gemma4/google_gemma-4-E2B-it-Q4_K_M.gguf")
 JSON_PATH = path("src/json/vision_data.json")
 TEMP_JSON_PATH = path("src/json/vision_data_tmp.json")
 
-CONTEXT_WINDOW = 2048
+CONTEXT_WINDOW = 1024
 MAX_TOKENS = 150
 
 ### STT / TTS 설정 (06 C-3과 동일)
@@ -323,6 +323,8 @@ llm = Llama(
     model_path=GEMMA_MODEL_PATH,
     n_gpu_layers=-1,
     n_ctx=CONTEXT_WINDOW,
+    n_batch=32,
+    n_ubatch=32,
     verbose=False,
 )
 
@@ -378,20 +380,30 @@ while True:
     height, width = frame.shape[:2]
 
     # 2. YOLO 탐지 (드론, 비행기, 헬리콥터만 → TARGET_CLASSES)
-    results = yolo.predict(
-        source=frame,
-        conf=CONF,
-        iou=0.5,
-        classes=TARGET_CLASSES,
-        verbose=False,
-    )
+    # 음성, LLM 작업 중에는 탐지를 쉼 -> YOLO와 Gemma가 gpu를 동시에 쓰면 프로그램이 종료되는 문제 해결
+    busy = job is not None
+    
+    if busy:
+    	boxes = []
+    	if last_seen is not None: # 작업 중에는 표적이 계속 있다고 보고, 상실 타이머를 멈춤
+    		last_seen = now
+    		
+    else:
+    	results = yolo.predict(
+        	source=frame,
+        	conf=CONF,
+        	iou=0.5,
+        	classes=TARGET_CLASSES,
+        	verbose=False,
+    	)
 
-    result = results[0]
+    	result = results[0]
+    	boxes = result.boxes
 
     # 3. 탐지 결과를 Dictionary 형태로 변환 (06 A-2와 동일)
     objects = []
 
-    for box in result.boxes:
+    for box in boxes:
         class_id = int(box.cls[0].item())
         confidence = float(box.conf[0].item())
         x1, y1, x2, y2 = (box.xyxy[0].cpu().tolist())
@@ -511,7 +523,7 @@ while True:
             job = worker.submit(speak_job, "아군으로 식별했습니다. 추적을 종료합니다.")
 
     # 8. 화면 표시 (FPS 계산은 04 실습 파일과 같은 지수 평균 방식 적용)
-    output_frame = result.plot()
+    output_frame = frame.copy() if busy else result.plot()
 
     elapsed_time = time.perf_counter() - start_time
     current_fps = 1.0 / elapsed_time if elapsed_time > 0 else 0.0
