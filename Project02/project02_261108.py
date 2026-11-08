@@ -45,7 +45,7 @@ HISTORY_SECONDS = 1.0      # 방향 계산에 쓰는 최근 기록 길이
 MOVE_RATIO = 0.05          # 화면 크기의 5% 이상 움직여야 이동으로 판단
 APPROACH_RATIO = 1.2       # bbox 면적이 1.2배 이상 커지면 접근
 RECEDE_RATIO = 0.8         # 0.8배 이하로 작아지면 멀어짐
-REPORT_INTERVAL = 10.0     # 추적 중 보고 간격 (초)
+REPORT_INTERVAL = 15.0     # 추적 중 보고 간격 (초)
 MAX_ASK = 3                # 피아 식별 질문 최대 횟수
 
 ### 상태 정의 (스테이트 머신)
@@ -464,6 +464,7 @@ while True:
     if job is not None and job.done():
         job_result = take_result(job)
         job = None
+        last_report = now # 작업이 끝난 시점부터 다음 보고까지 시간을 세고, 그동안 탐지
 
     # 6. 스테이트 머신 : 상태별 판단(next_state 결정) + 상태에 머무는 동안의 동작
     next_state = state
