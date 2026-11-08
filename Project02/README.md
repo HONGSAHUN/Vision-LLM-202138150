@@ -15,15 +15,13 @@ Project01의 피드백을 반영해, 이번에는 **스테이트 머신**으로 
 
 [![테스트 영상](dji.mp4)](https://github.com/user-attachments/assets/52f2f2d4-0a0e-4422-803c-735e52fb133f)
 
+<br>
 
-<!-- TODO: 실행 영상 링크 -->
-<!-- 
-<p align="center">
-  <img src="original.jpg" width="32%">
-  <img src="mask.jpg" width="32%">
-  <img src="frame.jpg" width="32%">
-</p>
--->
+[![직기 출현 영상](enemy.mp4)]https://github.com/user-attachments/assets/c04f9137-abe5-44ee-ac56-7969db7f1203
+
+<br>
+
+[![아군 출현 영상](frendly.mp4)]https://github.com/user-attachments/assets/cdf435fd-34bc-4e02-8292-2631ddf30dc9
 
 <br>
 
@@ -181,6 +179,15 @@ FPS는 파일 디코딩 + 추론 + 추적 + 기록 기준이고, 화면 그리�
 - `drone`, `airplane`, `helicopter`만 탐지 대상으로 사용 (`TARGET_CLASSES = [0, 2, 3]`, 38줄). `bird`, `kite`는 피아식별 대상이 아니라 제외
 - 보고할 때는 영어 클래스 이름을 한글로 바꿔서 전달 (`TYPE_NAMES`, 39줄)
 - Jetson에서는 아래처럼 INT8 TensorRT 엔진으로 변환해서 사용
+
+
+<p align="center">
+  <img src="Demo/drone.jpg" width="32%">
+  <img src="Demo/plane.jpg" width="32%">
+  <img src="Demo/heil.jpg" width="32%">
+</p>
+
+
 
 ### 주의할 점
 - 공개된 성능은 Hailo-8에서 잰 값이기에, Jetson의 TensorRT INT8 엔진에서는 값이 다를 수 있습니다.
