@@ -17,11 +17,11 @@ Project01의 피드백을 반영해, 이번에는 **스테이트 머신**으로 
 
 <br>
 
-[![직기 출현 영상](enemy.mp4)]https://github.com/user-attachments/assets/c04f9137-abe5-44ee-ac56-7969db7f1203
+[![적기 출현 영상](enemy.mp4)](https://github.com/user-attachments/assets/9f54c09c-8d9b-44d0-9724-74574c777b84)
 
 <br>
 
-[![아군 출현 영상](frendly.mp4)]https://github.com/user-attachments/assets/cdf435fd-34bc-4e02-8292-2631ddf30dc9
+[![아군 출현 영상](friendly.mp4)](https://github.com/user-attachments/assets/5cb904dd-8dca-499b-8c07-90ff79691123)
 
 <br>
 
@@ -175,11 +175,6 @@ FPS는 파일 디코딩 + 추론 + 추적 + 기록 기준이고, 화면 그리�
 - 제작자도 영상, Pi 기본 모델로 8n을 지정했습니다.
 - 맥북에서 HusAero를 포함한 공개 드론 모델 5종을 직접 테스트했을 때, 드론이 제대로 탐지된 모델은 HusAero-8n뿐이었습니다.
 
-### 이 프로젝트에서의 사용
-- `drone`, `airplane`, `helicopter`만 탐지 대상으로 사용 (`TARGET_CLASSES = [0, 2, 3]`, 38줄). `bird`, `kite`는 피아식별 대상이 아니라 제외
-- 보고할 때는 영어 클래스 이름을 한글로 바꿔서 전달 (`TYPE_NAMES`, 39줄)
-- Jetson에서는 아래처럼 INT8 TensorRT 엔진으로 변환해서 사용
-
 
 <p align="center">
   <img src="Demo/drone.jpg" width="32%">
@@ -188,6 +183,10 @@ FPS는 파일 디코딩 + 추론 + 추적 + 기록 기준이고, 화면 그리�
 </p>
 
 
+### 이 프로젝트에서의 사용
+- `drone`, `airplane`, `helicopter`만 탐지 대상으로 사용 (`TARGET_CLASSES = [0, 2, 3]`, 38줄). `bird`, `kite`는 피아식별 대상이 아니라 제외
+- 보고할 때는 영어 클래스 이름을 한글로 바꿔서 전달 (`TYPE_NAMES`, 39줄)
+- Jetson에서는 아래처럼 INT8 TensorRT 엔진으로 변환해서 사용
 
 ### 주의할 점
 - 공개된 성능은 Hailo-8에서 잰 값이기에, Jetson의 TensorRT INT8 엔진에서는 값이 다를 수 있습니다.
