@@ -34,21 +34,29 @@ Vision-LLM-202138150/
 │   │   ├── YOLO/husaero/
 │   │   │   ├── HusAero-8n.pt                           # 탐지 모델 원본 (레포에 포함, HusAero v0.3.0-rc5)
 │   │   │   └── HusAero-8n_int8.engine                  # INT8 TensorRT 엔진 (husaero_int8.py로 생성)
-│   │   ├── Gemma4/google_gemma-4-E2B-it-Q4_K_M.gguf    # Gemma 4 E2B
-│   │   └── Piper/ko_KR-kss-medium.onnx                 # 한국어 TTS 음성
-│   ├── datasets/husaero/                               # INT8 캘리브레이션용 val 250장 (레포에 포함)
+│   │   ├── Gemma4/google_gemma-4-E2B-it-Q4_K_M.gguf    # Gemma 4 E2B (05 섹션에서 준비)
+│   │   └── Piper/ko_KR-kss-medium.onnx                 # 한국어 TTS 음성 (06 C-2)
+│   ├── datasets/husaero/                               # INT8 캘리브레이션 데이터 (레포에 포함)
+│   │   ├── images/val/, labels/val/                    # MBAOD val 이미지·라벨 250장
+│   │   └── calibration.yaml                            # husaero_int8.py 실행 시 자동 생성
 │   ├── json/vision_data.json                           # 보고 시점의 탐지 결과 (실행 중 자동 생성)
 │   └── audio/                                          # 녹음(input.wav) / TTS(response.wav) (실행 중 자동 생성)
 ├── whisper.cpp/                                        # STT (06 C-1에서 빌드)
+├── .venv/                                              # ultralytics, llama-cpp-python 가상환경
 ├── .piper_venv/                                        # TTS 전용 가상환경 (06 C-2)
 └── Project02/
-    ├── project02_261108.py                             # 프로젝트 코드
+    ├── project02_261108.py                             # 프로젝트 코드 (Jetson)
+    ├── project02_261108_mac.py                         # 맥북 실행 버전 (데모 영상 촬영용)
     ├── husaero_int8.py                                 # HusAero-8n → INT8 TensorRT 엔진 변환
+    ├── project02_presentation.pdf                      # 발표 자료 (데모 영상 3개 첨부)
+    ├── Demo/                                           # 데모 영상(mp4)·실행 화면 사진(jpg)
     └── README.md                                       # 이 문서
 ```
 
 - **project02_261108.py**: 카메라 → YOLO 탐지 → 위치·방향 계산 → 스테이트 머신 → Gemma 보고 → TTS → STT → Gemma 피아식별을 처리하는 단일 실행 파일
+- **project02_261108_mac.py**: 같은 흐름을 맥북에서 실행하도록 바꾼 버전 (TensorRT 대신 `.pt` 모델 사용 등)
 - **husaero_int8.py**: 04 실습 파일의 INT8 변환 코드(`quantize=8`)를 HusAero-8n에 적용한 변환 스크립트
+- **project02_presentation.pdf**: 발표 자료. PDF에서는 영상이 재생되지 않아 대표 장면을 넣었고, 영상 3개는 첨부 파일로 포함
 
 <br>
 
