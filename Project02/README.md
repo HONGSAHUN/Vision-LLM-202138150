@@ -8,12 +8,12 @@
 
 Project01의 피드백을 반영해, 이번에는 **스테이트 머신**으로 전체 흐름을 설계했습니다.
 
-![테스트 사진](headline.jpg)
+![테스트 사진](Demo/headline.jpg)
 
 
 ### 구현 영상
 
-![테스트 영상](dji.mp4)
+[![테스트 영상](dji.mp4)](https://github.com/user-attachments/assets/52f2f2d4-0a0e-4422-803c-735e52fb133f)
 
 
 <!-- TODO: 실행 영상 링크 -->
