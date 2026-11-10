@@ -23,7 +23,7 @@ https://github.com/user-attachments/assets/9f54c09c-8d9b-44d0-9724-74574c777b84
 
 https://github.com/user-attachments/assets/5cb904dd-8dca-499b-8c07-90ff79691123
 
-> 위 데모 영상은 맥북(M3 Pro)에서 `project02_261108_mac.py`로 촬영했습니다. Jetson 버전(`project02_261108.py`)과 탐지 → 보고 → 식별 → 추적 흐름은 같고, 모델 형식(`.pt`)·카메라·녹음/재생 명령처럼 기기에 따라 달라지는 부분만 바꿨습니다.
+> 위 데모 영상은 맥북(M3 Pro)에서 `project02_261108_mac.py`로 촬영했습니다. 탐지 → 보고 → 식별 → 추적 흐름은 Jetson 버전(`project02_261108.py`)과 같고, 모델 형식(`.pt`)·카메라·녹음/재생 명령처럼 기기에 따라 달라지는 부분을 바꿨습니다. 촬영 이후 Jetson 테스트에서 추가한 수정(작업 중 YOLO 탐지 정지, 보고 간격 15초, `n_ctx` 1024)은 Jetson 버전에만 반영되어 있습니다.
 
 <br>
 
@@ -212,8 +212,6 @@ model.export(format="engine", imgsz=640, quantize=8, data=calibration.yaml,
 - 04 실습에서는 `261107/quantization.py`로 카메라 프레임 500장을 모아 캘리브레이션했습니다.
 - 이번에는 기본값으로 **HusAero dataset의 이미지**를 사용했습니다. INT8 캘리브레이션은 실제 입력에서 나오는 값의 범위를 보고 정밀도를 정하기 때문에, 탐지 대상(드론, 비행기)이 들어 있는 이미지가 더 적합하다고 판단했습니다.
 - yaml 형식은 `quantization.py`가 만드는 것과 같고, 경로만 HusAero dataset으로 바꿨습니다.
-
-<!-- TODO: FP32 .pt / INT8 .engine FPS 비교 결과 (Jetson 측정) -->
 
 <br>
 
@@ -413,7 +411,7 @@ Final Project 조건인 "객체 탐지 → 특정 이벤트 감지 → 음성 �
   - 해결 : 다른 커널을 종료하고 다시 실행했습니다.
 
 - **ROI 이미지 저장 실패 (06 B-4)**
-  - 문제 : `ROI_image_save.py`에서 "이미지 저장에 실패했습니다"가 반복됐습니다.
+  - 문제 : `ROI_image_save.py`에서 "이미지 저장에 실패했습니다"가 반복됐습니다. (당시 `Project02` 폴더에서 작업하던 실습 파일로, 지금은 `261107/`로 옮겨져 있음)
   - 원인 : 모델 경로는 `../src/...`인데 저장 경로는 `src/output/...`이라, `Project02` 안에 없는 폴더에 저장하려 했습니다. 읽는 쪽(`ROI_image_load.py`)도 다른 경로를 보고 있었습니다. `cv2.imwrite`는 실패해도 에러 없이 `False`만 돌려줍니다.
   - 해결 : 저장 경로에도 `../`를 붙여 맞췄고, 프로젝트 코드는 `__file__` 기준 경로로 바꿨습니다.
 
@@ -433,7 +431,6 @@ Final Project 조건인 "객체 탐지 → 특정 이벤트 감지 → 음성 �
     - Gemma 로드 설정을 05·06 실습과 같은 `n_batch=32`, `n_ubatch=32`로 맞추고, `n_ctx`를 1024로 줄여 메모리 사용량을 낮춤
 
 ### AI 활용 vs. 본인 기여도
-<!-- 검수 필요: 실제 진행 내용에 맞게 수정 -->
 - **AI 활용**
   - 스테이트 머신 구조 설계
   - INT8 변환 코드를 HusAero에 적용한 변환 스크립트 작성
